@@ -6,21 +6,38 @@ output:
   md_document:
     variant: markdown_github
 ---
-I've been using Everedoo to ask me two daily questions each day since September. "How was your day?" and "How much sleep did you get?"
+I've been using Everedoo (https://www.eurugo.com/) to ask me two daily questions each day since September 1, 2018. "How was your day?" and "How much sleep did you get?"
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
 
-```{r, warning=FALSE,message=FALSE}
+```{r Setup, include=FALSE}
+
+pkgs_needed = c("tidyverse","readr", "kableExtra","plotly", "viridis")
+source("http://bioconductor.org/biocLite.R")
+biocLite(setdiff(pkgs_needed, installed.packages()), suppressUpdates = TRUE)
 library(tidyverse)
 library(readr)
 library(kableExtra)
 library(plotly)
 library(viridis)
+```
 
-Satisfaction <- read_csv("export/Satisfaction.csv")
-Sleep <- read_csv("export/Sleep.csv")
+Initially I wanted to understand how my satisfaction with the day has fluctuated throughout the month. Since I was recording time spent sleeping, I expected them both to correlate but the correlation is kind of weak. 
+
+Unexpectedly, I think the fluctuation can be explained by the day before. I think the measure of satisfaction is always going to be relative because there isn't really a way to normalize. For example: if I spent a week with a series of bad days, the next okay day would seem really great in comparison. I don't know if there is a way to make these measurements more comparable over time. But that's something to look into.
+
+```{r, warning=FALSE,message=FALSE, echo = FALSE}
+Satisfaction <- read_delim("export/export_86745472-27C3-4591-BB63-AF5EC999E79B_20181028214003.csv", 
+    ";", escape_double = FALSE, trim_ws = TRUE, 
+    skip = 2)
+
+
+
+Sleep <- read_delim("export/export_FE76EE25-8480-43A6-9D85-6D102831F27A_20181028214003.csv", 
+    ";", escape_double = FALSE, trim_ws = TRUE, 
+    skip = 2)
 
 Combined  <- merge(Sleep, Satisfaction, by = "Date")
 
@@ -40,9 +57,10 @@ Gathered <- Combined %>%
   select(Date,Satisfaction,Sleep) %>%
   gather(key = Type,value = Amount,-Date)
 
-ggplot(Gathered, aes(x=Date, y= Amount, color = Type)) + geom_line() +theme_classic() + ylim(0,10) + theme(text = element_text(size=20), legend.position = "none")
+#ggplot(Gathered, aes(x=Date, y= Amount, color = Type)) + geom_line() +theme_classic() + ylim(0,10) + theme(text = element_text(size=20), legend.position = "none")
 
 
 ggplot(Combined, aes(x= Sleep, y = Satisfaction)) + geom_jitter(aes(color = as.integer(Date)))+ xlim(0,10) + ylim(0,10) +  geom_smooth(method='lm',formula=y~x,se = FALSE, color = "lightgrey")+theme_classic() + theme(legend.position = "none",text = element_text(size=20))+ scale_color_viridis_c()
 ```
 
+TODO: I'd like to look at the days where I enter the satisfaction after the days to see if there is a positive bias. I think I like to romanticise the past and it would be cool to see if that's really what I do.
