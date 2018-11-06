@@ -29,13 +29,13 @@ Initially I wanted to understand how my satisfaction with the day has fluctuated
 Unexpectedly, I think the fluctuation can be explained by the day before. I think the measure of satisfaction is always going to be relative because there isn't really a way to normalize. For example: if I spent a week with a series of bad days, the next okay day would seem really great in comparison. I don't know if there is a way to make these measurements more comparable over time. But that's something to look into.
 
 ```{r, warning=FALSE,message=FALSE, echo = FALSE}
-Satisfaction <- read_delim("export/export_86745472-27C3-4591-BB63-AF5EC999E79B_20181028214003.csv", 
+Satisfaction <- read_delim("export/export_86745472-27C3-4591-BB63-AF5EC999E79B_20181106085105.csv", 
     ";", escape_double = FALSE, trim_ws = TRUE, 
     skip = 2)
 
 
 
-Sleep <- read_delim("export/export_FE76EE25-8480-43A6-9D85-6D102831F27A_20181028214003.csv", 
+Sleep <- read_delim("export/export_FE76EE25-8480-43A6-9D85-6D102831F27A_20181106085105.csv", 
     ";", escape_double = FALSE, trim_ws = TRUE, 
     skip = 2)
 
@@ -63,4 +63,16 @@ Gathered <- Combined %>%
 ggplot(Combined, aes(x= Sleep, y = Satisfaction)) + geom_jitter(aes(color = as.integer(Date)))+ xlim(0,10) + ylim(0,10) +  geom_smooth(method='lm',formula=y~x,se = FALSE, color = "lightgrey")+theme_classic() + theme(legend.position = "none",text = element_text(size=20))+ scale_color_viridis_c()
 ```
 
-TODO: I'd like to look at the days where I enter the satisfaction after the days to see if there is a positive bias. I think I like to romanticise the past and it would be cool to see if that's really what I do.
+Next, I'd like to look at the days where I enter the satisfaction after the days to see if there is a positive bias. I think I like to romanticise the past and it would be cool to see if that's really what I do.
+
+```{r, warning=FALSE,message=FALSE, echo = FALSE}
+
+library(tidyverse)
+library(lubridate)
+Combined$Satisfaction.Entry <-  hms::as.hms(Combined$Satisfaction.Entry)
+ggplot(Combined, aes(x = Satisfaction.Entry)) + geom_density(fill = "royalblue") + theme_classic()
+
+ggplot(Combined, aes(x = Satisfaction.Entry, y = Satisfaction)) + geom_point(aes(color = Satisfaction)) + theme_classic() + theme(legend.position = "none",text = element_text(size=18))+ scale_color_viridis_c() + labs(x = "Entry Time", y="Satisfaction on a 1-10 Scale", title = "When I enter the information later I'm more satisfied") + ylim(0,10)
+```
+
+Actually it looks like my average answers 7-8 come out later in the day. 

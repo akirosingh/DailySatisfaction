@@ -6,4 +6,8 @@ Unexpectedly, I think the fluctuation can be explained by the day before. I thin
 
 ![](README_files/figure-markdown_github/unnamed-chunk-1-1.png)![](README_files/figure-markdown_github/unnamed-chunk-1-2.png)![](README_files/figure-markdown_github/unnamed-chunk-1-3.png)
 
-TODO: I'd like to look at the days where I enter the satisfaction after the days to see if there is a positive bias. I think I like to romanticise the past and it would be cool to see if that's really what I do.
+Next, I'd like to look at the days where I enter the satisfaction after the days to see if there is a positive bias. I think I like to romanticise the past and it would be cool to see if that's really what I do.
+
+![](README_files/figure-markdown_github/unnamed-chunk-2-1.png)![](README_files/figure-markdown_github/unnamed-chunk-2-2.png)
+
+Actually it looks like my average answers 7-8 come out later in the day.
